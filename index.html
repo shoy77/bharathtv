@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta name="keywords" content="Live radio bharath music" />
+ <meta name="description" content="Bharath Music" />
+ <link type="text/css" rel="stylesheet" href="http://shoy.mobie.in/creator_template.css" />
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Multi YouTube Video Player</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: auto;
+  }
+
+  h1 {
+    text-align: center;
+    color: #cc0000;
+  }
+
+  .video-frame {
+    padding: 5px;
+    border-radius: 24px;
+    background: linear-gradient(90deg, #007bff, #d633ff);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+  }
+
+  .video-frame iframe {
+    width: 100%;
+    height: 300px;
+    border: none;
+    border-radius: 20px;
+    transition: opacity 0.3s ease;
+  }
+
+  .video-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: center;
+  }
+
+  .video-buttons button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #cc0000;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    flex: 1 0 45%;
+  }
+
+  .video-buttons button:hover {
+    background-color: #b30000;
+  }
+
+  @media (max-width: 400px) {
+    .video-buttons button {
+      flex: 1 0 100%;
+    }
+
+    .video-frame iframe {
+      height: 200px;
+    }
+  }
+</style>
+
+
+</head>
+
+<body>
+ <div class="container">
+  <h1>Live Tv</h1>
+
+  <div class="video-frame">
+  <iframe id="ytPlayer" src="https://www.youtube.com/embed/I7dbhLnigEQ?autoplay=1&mute=0"></iframe>
+  </div>
+
+  <div class="video-buttons">
+   <button onclick="changeVideo('nObUcHKZEGY')">Reporter Tv</button>
+   <button onclick="changeVideo('tXRuaacO-ZU')">Asianet News</button>
+   <button onclick="changeVideo('1wECsnGZcfc')">24 News</button>
+   <button onclick="changeVideo('tgBTspqA5nY')">Manorama News</button>
+   <button onclick="changeVideo('yiiqRHY1Bl8')">Kairali News</button>
+   <button onclick="changeVideo('yKWe25rKSpU')">Janam Tv</button>
+   <button onclick="changeVideo('YGEgelAiUf0')">Mathrubhumi News</button>
+   <button onclick="changeVideo('-8d8-c0yvyU')">Media One Tv</button>
+   <button onclick="changeVideo('yvWggAG_x1I')">YRF Music</button>
+   <button onclick="changeVideo('36YnV9STBqc')">Good Life Music</button>
+   <button id="toggleBtn" onclick="toggleVideo()">Video Off</button>
+  </div>
+ </div>
+
+ <script>
+  function changeVideo(videoId) {
+    const player = document.getElementById("ytPlayer");
+    player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+  }
+
+  let isVideoHidden = false;
+
+  function toggleVideo() {
+    const player = document.getElementById("ytPlayer");
+    const btn = document.getElementById("toggleBtn");
+    if (isVideoHidden) {
+      player.style.opacity = "1";
+      btn.innerText = "Video Off";
+      isVideoHidden = false;
+    } else {
+      player.style.opacity = "0";
+      btn.innerText = "Video On";
+      isVideoHidden = true;
+    }
+  }
+ </script>
+</body>
+
+</html>
