@@ -1,130 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
- <meta name="keywords" content="Live radio bharath music" />
- <meta name="description" content="Bharath Music" />
- <link type="text/css" rel="stylesheet" href="http://shoy.mobie.in/creator_template.css" />
- <meta charset="UTF-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>Multi YouTube Video Player</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bharath YouTube Player</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
-    background: #f0f0f0;
-    margin: 0;
-    padding: 20px;
+    margin:0; background:#111; color:#fff; font-family:sans-serif; 
+    display:flex; flex-direction:column; height:100vh;
   }
-
-  .container {
-    max-width: 600px;
-    margin: auto;
+  header, footer {
+    background:#000; text-align:center; padding:12px; font-weight:bold;
   }
-
-  h1 {
-    text-align: center;
-    color: #cc0000;
+  .player-wrap {
+    position:relative; width:100%; flex:0 0 auto;
+    max-height:50vh; transition:all 0.3s ease;
   }
-
-  .video-frame {
-    padding: 5px;
-    border-radius: 24px;
-    background: linear-gradient(90deg, #007bff, #d633ff);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
+  .player-wrap::before { content:''; display:block; padding-top:56.25%; }
+  iframe {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    border:0; background:black;
   }
-
-  .video-frame iframe {
-    width: 100%;
-    height: 300px;
-    border: none;
-    border-radius: 20px;
-    transition: opacity 0.3s ease;
+  .channels { flex:1; overflow-y:auto; background:#181818; }
+  .channel {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 14px; border-bottom:1px solid #222; cursor:pointer;
   }
-
-  .video-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
-    justify-content: center;
-  }
-
-  .video-buttons button {
-    padding: 10px 15px;
-    font-size: 16px;
-    background-color: #cc0000;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    flex: 1 0 45%;
-  }
-
-  .video-buttons button:hover {
-    background-color: #b30000;
-  }
-
-  @media (max-width: 400px) {
-    .video-buttons button {
-      flex: 1 0 100%;
-    }
-
-    .video-frame iframe {
-      height: 200px;
-    }
-  }
+  .channel.active { background:#2196f3; }
+  .channel span { font-size:14px; }
+  .lang { color:#aaa; font-size:12px; }
 </style>
-
-
 </head>
-
 <body>
- <div class="container">
-  <h1>Live Tv</h1>
 
-  <div class="video-frame">
-  <iframe id="ytPlayer" src="https://www.youtube.com/embed/I7dbhLnigEQ?autoplay=1&mute=0"></iframe>
-  </div>
+<header>📺 Bharath YouTube Player</header>
 
-  <div class="video-buttons">
-   <button onclick="changeVideo('nObUcHKZEGY')">Reporter Tv</button>
-   <button onclick="changeVideo('tXRuaacO-ZU')">Asianet News</button>
-   <button onclick="changeVideo('1wECsnGZcfc')">24 News</button>
-   <button onclick="changeVideo('tgBTspqA5nY')">Manorama News</button>
-   <button onclick="changeVideo('yiiqRHY1Bl8')">Kairali News</button>
-   <button onclick="changeVideo('yKWe25rKSpU')">Janam Tv</button>
-   <button onclick="changeVideo('YGEgelAiUf0')">Mathrubhumi News</button>
-   <button onclick="changeVideo('-8d8-c0yvyU')">Media One Tv</button>
-   <button onclick="changeVideo('yvWggAG_x1I')">YRF Music</button>
-   <button onclick="changeVideo('36YnV9STBqc')">Good Life Music</button>
-   <button id="toggleBtn" onclick="toggleVideo()">Video Off</button>
-  </div>
- </div>
+<div class="player-wrap" id="playerWrap">
+  <iframe id="ytPlayer" 
+          src="https://www.youtube.com/embed/I7dbhLnigEQ?autoplay=1&mute=0" 
+          allowfullscreen 
+          allow="autoplay; fullscreen; encrypted-media">
+  </iframe>
+</div>
 
- <script>
-  function changeVideo(videoId) {
-    const player = document.getElementById("ytPlayer");
-    player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-  }
+<div class="channels" id="channelList"></div>
 
-  let isVideoHidden = false;
+<footer>© 2025 Bharath TV | Rotate for fullscreen</footer>
 
-  function toggleVideo() {
-    const player = document.getElementById("ytPlayer");
-    const btn = document.getElementById("toggleBtn");
-    if (isVideoHidden) {
-      player.style.opacity = "1";
-      btn.innerText = "Video Off";
-      isVideoHidden = false;
-    } else {
-      player.style.opacity = "0";
-      btn.innerText = "Video On";
-      isVideoHidden = true;
+<script>
+const channels = [
+  { name: "Reporter TV", lang: "ML", id: "nObUcHKZEGY" },
+  { name: "Asianet News", lang: "ML", id: "tXRuaacO-ZU" },
+  { name: "24 News", lang: "ML", id: "1wECsnGZcfc" },
+  { name: "Manorama News", lang: "ML", id: "tgBTspqA5nY" },
+  { name: "Kairali News", lang: "ML", id: "yiiqRHY1Bl8" },
+  { name: "Janam TV", lang: "ML", id: "yKWe25rKSpU" },
+  { name: "Mathrubhumi News", lang: "ML", id: "YGEgelAiUf0" },
+  { name: "Media One TV", lang: "ML", id: "-8d8-c0yvyU" },
+  { name: "YRF Music", lang: "HI", id: "yvWggAG_x1I" },
+  { name: "Good Life Music", lang: "EN", id: "36YnV9STBqc" }
+];
+
+const list = document.getElementById("channelList");
+const player = document.getElementById("ytPlayer");
+const wrap = document.getElementById("playerWrap");
+
+function loadChannel(index) {
+  const ch = channels[index];
+  player.src = `https://www.youtube.com/embed/${ch.id}?autoplay=1&mute=0`;
+  [...list.children].forEach((row, i) => {
+    row.classList.toggle("active", i === index);
+  });
+}
+
+channels.forEach((ch, i) => {
+  const row = document.createElement("div");
+  row.className = "channel";
+  row.innerHTML = `<span>${ch.name}</span><span class="lang">${ch.lang}</span>`;
+  row.onclick = () => loadChannel(i);
+  list.appendChild(row);
+});
+loadChannel(0);
+
+// 🌀 Auto fullscreen on rotate
+async function handleOrientation() {
+  if (window.matchMedia("(orientation: landscape)").matches) {
+    // request fullscreen
+    try {
+      if (wrap.requestFullscreen) await wrap.requestFullscreen();
+      else if (wrap.webkitRequestFullscreen) await wrap.webkitRequestFullscreen();
+    } catch (err) {
+      console.log("Fullscreen blocked by user gesture");
     }
+  } else {
+    if (document.fullscreenElement) document.exitFullscreen();
   }
- </script>
-</body>
+}
 
+// Listen for rotation changes
+window.addEventListener("orientationchange", handleOrientation);
+</script>
+
+</body>
 </html>
