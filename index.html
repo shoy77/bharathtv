@@ -2,104 +2,148 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bharath YouTube Player</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>📡 Bharath Live TV — Gemini Blue TV Grid</title>
 <style>
-  body {
-    margin:0; background:#111; color:#fff; font-family:sans-serif; 
-    display:flex; flex-direction:column; height:100vh;
+  :root {
+    --g1:#007bff;
+    --g2:#7f00ff;
+    --accent:#ffd64d;
+    --bg:#05060a;
   }
-  header, footer {
-    background:#000; text-align:center; padding:12px; font-weight:bold;
+  html,body{
+    margin:0;
+    padding:0;
+    height:100%;
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:linear-gradient(180deg,var(--g1),var(--g2));
+    color:#fff;
+    overflow:hidden; /* lock whole page scroll */
+    animation:fadeIn 1s ease;
   }
-  .player-wrap {
-    position:relative; width:100%; flex:0 0 auto;
-    max-height:50vh; transition:all 0.3s ease;
+  @keyframes fadeIn {from {opacity:0;} to {opacity:1;}}
+  .wrap{
+    max-width:1200px;
+    margin:0 auto;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    height:100%;
   }
-  .player-wrap::before { content:''; display:block; padding-top:56.25%; }
-  iframe {
-    position:absolute; top:0; left:0; width:100%; height:100%;
-    border:0; background:black;
+
+  /* Header + Video + Fullscreen as one locked frame */
+  .top-frame{
+    flex: 0 0 auto;
+    padding:10px;
+    text-align:center;
+    background:linear-gradient(180deg,var(--g1),var(--g2));
+    box-shadow:0 4px 16px rgba(0,0,0,0.3);
   }
-  .channels { flex:1; overflow-y:auto; background:#181818; }
-  .channel {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:10px 14px; border-bottom:1px solid #222; cursor:pointer;
+  .top-frame h1{font-size:28px;color:var(--accent); margin:0; text-shadow:0 4px 16px rgba(127,0,255,0.3);}
+  .top-frame .sub{font-size:14px;color:rgba(255,255,255,0.8); margin-bottom:10px;}
+
+  .video-container{
+    width:100%;
+    max-width:800px;
+    margin:0 auto 10px;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 10px 28px rgba(0,0,0,0.5);
+    background:#000;
   }
-  .channel.active { background:#2196f3; }
-  .channel span { font-size:14px; }
-  .lang { color:#aaa; font-size:12px; }
+  .video-container iframe{
+    width:100%;
+    height:calc(100vw * 9 / 16);
+    max-height:450px;
+    min-height:220px;
+    border:0;
+    border-radius:12px;
+  }
+  .fullscreen-btn{
+    display:block;
+    margin:10px auto 0;
+    padding:10px 18px;
+    background:linear-gradient(135deg,var(--g1),var(--g2));
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(0,0,0,0.5);
+  }
+
+  /* Scrolling grid only */
+  .gridWrap{
+    flex:1 1 auto;
+    overflow:auto;
+    padding:8px;
+  }
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+  .tile{background:rgba(0,0,0,0.2);border-radius:12px;cursor:pointer;overflow:hidden;transition:transform 0.15s ease,box-shadow 0.15s ease;display:flex;flex-direction:column;align-items:center;padding:6px;}
+  .tile:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,0.5);}
+  .thumb{width:100%;height:120px;overflow:hidden;border-radius:8px;margin-bottom:6px;}
+  .thumb img{width:100%;height:100%;object-fit:cover;}
+  .title{font-weight:700;font-size:15px;text-align:center;}
+
+  @media(max-width:520px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
+    .thumb{height:90px;}
+    .video-container iframe{height:calc(100vw * 9 / 16); max-height:280px;}
+  }
+  @media(min-width:1200px){
+    .video-container iframe{height:450px;}
+  }
 </style>
 </head>
 <body>
+  <div class="wrap">
+    <!-- Top locked frame -->
+    <div class="top-frame">
+      <h1>📡 Bharath Live TV</h1>
+      <div class="sub">Tap tile → Updates video • Fullscreen button below player</div>
+      <div class="video-container">
+        <iframe id="mainPlayer" src="https://www.youtube.com/embed/I7dbhLnigEQ?autoplay=1" allowfullscreen></iframe>
+      </div>
+      <button class="fullscreen-btn" id="fsBtn">Full Screen</button>
+    </div>
 
-<header>📺 Bharath YouTube Player</header>
-
-<div class="player-wrap" id="playerWrap">
-  <iframe id="ytPlayer" 
-          src="https://www.youtube.com/embed/I7dbhLnigEQ?autoplay=1&mute=0" 
-          allowfullscreen 
-          allow="autoplay; fullscreen; encrypted-media">
-  </iframe>
-</div>
-
-<div class="channels" id="channelList"></div>
-
-<footer>© 2025 Bharath TV | Rotate for fullscreen</footer>
+    <!-- Scrolling Grid -->
+    <div class="gridWrap">
+      <div class="grid">
+        <div class="tile" onclick="openVideo('nObUcHKZEGY')"><div class="thumb"><img src="https://img.youtube.com/vi/nObUcHKZEGY/hqdefault.jpg"></div><div class="title">Reporter Tv</div></div>
+        <div class="tile" onclick="openVideo('tXRuaacO-ZU')"><div class="thumb"><img src="https://img.youtube.com/vi/tXRuaacO-ZU/hqdefault.jpg"></div><div class="title">Asianet News</div></div>
+        <div class="tile" onclick="openVideo('1wECsnGZcfc')"><div class="thumb"><img src="https://img.youtube.com/vi/1wECsnGZcfc/hqdefault.jpg"></div><div class="title">24 News</div></div>
+        <div class="tile" onclick="openVideo('tgBTspqA5nY')"><div class="thumb"><img src="https://img.youtube.com/vi/tgBTspqA5nY/hqdefault.jpg"></div><div class="title">Manorama News</div></div>
+        <div class="tile" onclick="openVideo('_7n2i9YVscA')"><div class="thumb"><img src="https://img.youtube.com/vi/_7n2i9YVscA/hqdefault.jpg"></div><div class="title">Amritha News</div></div>
+        <div class="tile" onclick="openVideo('yiiqRHY1Bl8')"><div class="thumb"><img src="https://img.youtube.com/vi/yiiqRHY1Bl8/hqdefault.jpg"></div><div class="title">Kairali News</div></div>
+        <div class="tile" onclick="openVideo('yKWe25rKSpU')"><div class="thumb"><img src="https://img.youtube.com/vi/yKWe25rKSpU/hqdefault.jpg"></div><div class="title">Janam Tv</div></div>
+        <div class="tile" onclick="openVideo('YGEgelAiUf0')"><div class="thumb"><img src="https://img.youtube.com/vi/YGEgelAiUf0/hqdefault.jpg"></div><div class="title">Mathrubhumi News</div></div>
+        <div class="tile" onclick="openVideo('-8d8-c0yvyU')"><div class="thumb"><img src="https://img.youtube.com/vi/-8d8-c0yvyU/hqdefault.jpg"></div><div class="title">Media One Tv</div></div>
+        <div class="tile" onclick="openVideo('yvWggAG_x1I')"><div class="thumb"><img src="https://img.youtube.com/vi/yvWggAG_x1I/hqdefault.jpg"></div><div class="title">YRF Music</div></div>
+        <div class="tile" onclick="openVideo('36YnV9STBqc')"><div class="thumb"><img src="https://img.youtube.com/vi/36YnV9STBqc/hqdefault.jpg"></div><div class="title">Good Life Music</div></div>
+        <div class="tile" onclick="openVideo('I7dbhLnigEQ')"><div class="thumb"><img src="https://img.youtube.com/vi/I7dbhLnigEQ/hqdefault.jpg"></div><div class="title">Bharath Promo</div></div>
+      </div>
+    </div>
+  </div>
 
 <script>
-const channels = [
-  { name: "Reporter TV", lang: "ML", id: "nObUcHKZEGY" },
-  { name: "Asianet News", lang: "ML", id: "tXRuaacO-ZU" },
-  { name: "24 News", lang: "ML", id: "1wECsnGZcfc" },
-  { name: "Manorama News", lang: "ML", id: "tgBTspqA5nY" },
-  { name: "Kairali News", lang: "ML", id: "yiiqRHY1Bl8" },
-  { name: "Janam TV", lang: "ML", id: "yKWe25rKSpU" },
-  { name: "Mathrubhumi News", lang: "ML", id: "YGEgelAiUf0" },
-  { name: "Media One TV", lang: "ML", id: "-8d8-c0yvyU" },
-  { name: "YRF Music", lang: "HI", id: "yvWggAG_x1I" },
-  { name: "Good Life Music", lang: "EN", id: "36YnV9STBqc" }
-];
-
-const list = document.getElementById("channelList");
-const player = document.getElementById("ytPlayer");
-const wrap = document.getElementById("playerWrap");
-
-function loadChannel(index) {
-  const ch = channels[index];
-  player.src = `https://www.youtube.com/embed/${ch.id}?autoplay=1&mute=0`;
-  [...list.children].forEach((row, i) => {
-    row.classList.toggle("active", i === index);
-  });
-}
-
-channels.forEach((ch, i) => {
-  const row = document.createElement("div");
-  row.className = "channel";
-  row.innerHTML = `<span>${ch.name}</span><span class="lang">${ch.lang}</span>`;
-  row.onclick = () => loadChannel(i);
-  list.appendChild(row);
-});
-loadChannel(0);
-
-// 🌀 Auto fullscreen on rotate
-async function handleOrientation() {
-  if (window.matchMedia("(orientation: landscape)").matches) {
-    // request fullscreen
-    try {
-      if (wrap.requestFullscreen) await wrap.requestFullscreen();
-      else if (wrap.webkitRequestFullscreen) await wrap.webkitRequestFullscreen();
-    } catch (err) {
-      console.log("Fullscreen blocked by user gesture");
-    }
-  } else {
-    if (document.fullscreenElement) document.exitFullscreen();
+  // Tap a tile to change main video
+  function openVideo(id){
+    document.getElementById('mainPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
   }
-}
 
-// Listen for rotation changes
-window.addEventListener("orientationchange", handleOrientation);
+  // Fullscreen button
+  const fsBtn = document.getElementById('fsBtn');
+  fsBtn.addEventListener('click', ()=>{
+    const iframe = document.getElementById('mainPlayer');
+    if(iframe.requestFullscreen){
+      iframe.requestFullscreen();
+    } else if(iframe.webkitRequestFullscreen){
+      iframe.webkitRequestFullscreen();
+    } else if(iframe.msRequestFullscreen){
+      iframe.msRequestFullscreen();
+    }
+  });
 </script>
-
 </body>
 </html>
