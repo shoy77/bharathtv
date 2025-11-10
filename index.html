@@ -1,87 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>📡 Bharath Tv</title>
 <style>
 :root { --g1:#007bff; --g2:#7f00ff; --accent:#ffd64d; --bg:#05060a; }
-html,body{margin:0;padding:0;height:100%;font-family:"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,var(--g1),var(--g2));color:#fff;overflow:hidden;animation:fadeIn 1s ease;}
-@keyframes fadeIn {from {opacity:0;} to {opacity:1;}}
-.wrap{max-width:1200px;margin:0 auto;padding:0;display:flex;flex-direction:column;height:100%;}
 
-/* Top locked frame with blur & shadow */
-.top-frame{flex:0 0 auto;padding:10px;text-align:center;background:rgba(0,0,0,0.3);backdrop-filter:blur(8px);box-shadow:0 8px 24px rgba(0,0,0,0.5);border-radius:12px;margin:8px;}
-.top-frame h1{font-size:28px;color:var(--accent);margin:0;text-shadow:0 4px 16px rgba(127,0,255,0.3);}
-.top-frame .sub{font-size:14px;color:rgba(255,255,255,0.8);margin-bottom:10px;}
-
-.video-container{width:100%;max-width:800px;margin:0 auto 10px;border-radius:12px;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,0.5);background:#000;}
-.video-container iframe{width:100%;height:calc(100vw * 9 / 16);max-height:450px;min-height:220px;border:0;border-radius:12px;}
-
-.fullscreen-btn{display:block;margin:10px auto 0;padding:10px 18px;background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;border:none;border-radius:10px;font-size:16px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.5);}
-
-.gridWrap{flex:1 1 auto;overflow:auto;padding:8px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
-.tile{background:rgba(0,0,0,0.2);border-radius:12px;cursor:pointer;overflow:hidden;transition:transform 0.15s ease,box-shadow 0.15s ease;display:flex;flex-direction:column;align-items:center;padding:6px;}
-.tile:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,0.5);}
-.thumb{width:100%;height:120px;overflow:hidden;border-radius:8px;margin-bottom:6px;}
-.thumb img{width:100%;height:100%;object-fit:cover;}
-.title{font-weight:700;font-size:15px;text-align:center;}
-
-@media(max-width:520px){
-  .grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
-  .thumb{height:90px;}
-  .video-container iframe{height:calc(100vw * 9 / 16);max-height:280px;}
-  .top-frame h1{font-size:22px;}
-  .top-frame .sub{font-size:12px;}
-  .fullscreen-btn{font-size:14px;padding:8px 14px;}
+html,body{
+  margin:0;
+  padding:0;
+  height:100%;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:linear-gradient(180deg,var(--g1),var(--g2));
+  color:#fff;
+  animation:fadeIn 1s ease;
+  /* keep page itself from scrolling so grid scrolls independently */
+  overflow:hidden;
 }
-@media(min-width:1200px){.video-container iframe{height:450px;}}
+@keyframes fadeIn {from{opacity:0}to{opacity:1}}
+
+.wrap{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  height:100vh; /* use full viewport height */
+}
+
+/* Top locked frame */
+.top-frame{
+  flex:0 0 auto;
+  padding:10px;
+  text-align:center;
+  background:rgba(0,0,0,0.28);
+  backdrop-filter:blur(8px);
+  box-shadow:0 8px 24px rgba(0,0,0,0.45);
+  border-radius:12px;
+  margin:8px;
+}
+.top-frame h1{font-size:28px;color:var(--accent);margin:0;text-shadow:0 4px 16px rgba(127,0,255,0.3);}
+.top-frame .sub{font-size:14px;color:rgba(255,255,255,0.85);margin-bottom:10px;}
+
+/* Video container */
+.video-container{
+  width:100%;
+  max-width:900px;
+  margin:0 auto 8px;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 10px 28px rgba(0,0,0,0.45);
+  background:#000;
+}
+.video-container iframe{
+  width:100%;
+  height:calc(100vw * 9 / 16); /* responsive */
+  max-height:450px;
+  min-height:200px;
+  border:0;
+  display:block;
+}
+
+/* Fullscreen button */
+.fullscreen-btn{
+  display:block;
+  margin:8px auto 0;
+  padding:10px 18px;
+  background:linear-gradient(135deg,var(--g1),var(--g2));
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,0.45);
+}
+
+/* Scrolling grid area (fills remaining height) */
+.gridWrap{
+  flex:1 1 auto;
+  overflow:auto;       /* this scrolls independently */
+  padding:12px;
+  -webkit-overflow-scrolling: touch;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:12px;
+}
+
+/* Tile styles */
+.tile{
+  background:rgba(0,0,0,0.18);
+  border-radius:12px;
+  cursor:pointer;
+  overflow:hidden;
+  transition:transform .15s ease, box-shadow .15s ease;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:8px;
+}
+.tile:hover{ transform:translateY(-4px); box-shadow:0 10px 28px rgba(0,0,0,0.45); }
+.thumb{ width:100%; height:120px; overflow:hidden; border-radius:8px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; background:#111;}
+.thumb img{ max-width:100%; max-height:100%; object-fit:contain; display:block; }
+.title{ font-weight:700; font-size:15px; text-align:center; color:#fff; }
+
+/* MOBILE: keep video visible but smaller */
+@media (max-width:520px){
+  .grid{ grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); }
+  .thumb{ height:90px; }
+  .video-container iframe{ height:calc(100vw * 9 / 16); max-height:280px; }
+  .top-frame h1{ font-size:20px; }
+  .fullscreen-btn{ font-size:14px; padding:8px 14px; }
+}
+
+/* DESKTOP/LARGE SCREENS: reduce video height so list is visible */
+@media (min-width:1024px){
+  /* make the iframe a fixed, smaller height on wide screens */
+  .video-container iframe{
+    height:320px;   /* ← reduced height for desktop so grid shows below */
+    max-height:320px;
+  }
+  /* reduce margins so more vertical space for grid */
+  .top-frame{ margin:10px 12px; padding:8px; }
+  .video-container{ margin-bottom:6px; max-width:1000px; }
+  .gridWrap{ padding:16px; }
+  /* optionally increase grid columns on wide screens */
+  .grid{ grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+}
+
+/* Extra large screens (TV) — make video slightly smaller to preserve grid */
+@media (min-width:1600px){
+  .video-container iframe{ height:280px; max-height:280px; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:16px; }
+}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top-frame">
     <h1>✨ Bharath TV ✨</h1>
-    <div class="sub"> Watch Your Favorite Tv Channels Streaming Live </div>
+    <div class="sub">Watch Your Favorite Tv Channels Streaming Live</div>
+
     <div class="video-container">
-      <iframe id="mainPlayer" 
-        src="https://www.youtube.com/embed/u_EkyQUX8yY?autoplay=1&controls=0&modestbranding=1&rel=0&showinfo=0&disablekb=1&fs=0" 
-        allowfullscreen>
+      <iframe id="mainPlayer"
+        src="https://www.youtube.com/embed/u_EkyQUX8yY?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&disablekb=1&fs=0"
+        allow="autoplay" allowfullscreen>
       </iframe>
     </div>
+
     <button class="fullscreen-btn" id="fsBtn">Full Screen</button>
   </div>
 
   <!-- Scrolling Grid -->
-  <div class="gridWrap">
-    <div class="grid">
-      <div class="tile" onclick="openVideo('nObUcHKZEGY')"><div class="thumb"><img src="https://img.youtube.com/vi/nObUcHKZEGY/hqdefault.jpg"></div><div class="title">Reporter Tv</div></div>
-      <div class="tile" onclick="openVideo('tXRuaacO-ZU')"><div class="thumb"><img src="https://img.youtube.com/vi/tXRuaacO-ZU/hqdefault.jpg"></div><div class="title">Asianet News</div></div>
-      <div class="tile" onclick="openVideo('1wECsnGZcfc')"><div class="thumb"><img src="https://img.youtube.com/vi/1wECsnGZcfc/hqdefault.jpg"></div><div class="title">24 News</div></div>
-      <div class="tile" onclick="openVideo('tgBTspqA5nY')"><div class="thumb"><img src="https://img.youtube.com/vi/tgBTspqA5nY/hqdefault.jpg"></div><div class="title">Manorama News</div></div>
-      <div class="tile" onclick="openVideo('vkXkV1y_oCI')"><div class="thumb"><img src="https://img.youtube.com/vi/vkXkV1y_oCI/hqdefault.jpg"></div><div class="title">News Malayalam</div></div>
-      <div class="tile" onclick="openVideo('yiiqRHY1Bl8')"><div class="thumb"><img src="https://img.youtube.com/vi/yiiqRHY1Bl8/hqdefault.jpg"></div><div class="title">Kairali News</div></div>
-      <div class="tile" onclick="openVideo('yKWe25rKSpU')"><div class="thumb"><img src="https://img.youtube.com/vi/yKWe25rKSpU/hqdefault.jpg"></div><div class="title">Janam Tv</div></div>
-      <div class="tile" onclick="openVideo('YGEgelAiUf0')"><div class="thumb"><img src="https://img.youtube.com/vi/YGEgelAiUf0/hqdefault.jpg"></div><div class="title">Mathrubhumi News</div></div>
-      <div class="tile" onclick="openVideo('-8d8-c0yvyU')"><div class="thumb"><img src="https://img.youtube.com/vi/-8d8-c0yvyU/hqdefault.jpg"></div><div class="title">Media One Tv</div></div>
-      <div class="tile" onclick="openVideo('yvWggAG_x1I')"><div class="thumb"><img src="https://img.youtube.com/vi/yvWggAG_x1I/hqdefault.jpg"></div><div class="title">YRF Music</div></div>
-      <div class="tile" onclick="openVideo('36YnV9STBqc')"><div class="thumb"><img src="https://img.youtube.com/vi/36YnV9STBqc/hqdefault.jpg"></div><div class="title">Good Life Music</div></div>
-      <div class="tile" onclick="openVideo('xRg-fDgCpJc')"><div class="thumb"><img src="https://img.youtube.com/vi/xRg-fDgCpJc/hqdefault.jpg"></div><div class="title">India Tv</div></div>
+  <div class="gridWrap" id="gridWrap">
+    <div class="grid" id="grid">
+      <div class="tile" onclick="openVideo('nObUcHKZEGY')"><div class="thumb"><img src="https://img.youtube.com/vi/nObUcHKZEGY/hqdefault.jpg" alt=""></div><div class="title">Reporter Tv</div></div>
+      <div class="tile" onclick="openVideo('tXRuaacO-ZU')"><div class="thumb"><img src="https://img.youtube.com/vi/tXRuaacO-ZU/hqdefault.jpg" alt=""></div><div class="title">Asianet News</div></div>
+      <div class="tile" onclick="openVideo('1wECsnGZcfc')"><div class="thumb"><img src="https://img.youtube.com/vi/1wECsnGZcfc/hqdefault.jpg" alt=""></div><div class="title">24 News</div></div>
+      <div class="tile" onclick="openVideo('tgBTspqA5nY')"><div class="thumb"><img src="https://img.youtube.com/vi/tgBTspqA5nY/hqdefault.jpg" alt=""></div><div class="title">Manorama News</div></div>
+      <div class="tile" onclick="openVideo('vkXkV1y_oCI')"><div class="thumb"><img src="https://img.youtube.com/vi/vkXkV1y_oCI/hqdefault.jpg" alt=""></div><div class="title">News Malayalam</div></div>
+      <div class="tile" onclick="openVideo('yiiqRHY1Bl8')"><div class="thumb"><img src="https://img.youtube.com/vi/yiiqRHY1Bl8/hqdefault.jpg" alt=""></div><div class="title">Kairali News</div></div>
+      <div class="tile" onclick="openVideo('yKWe25rKSpU')"><div class="thumb"><img src="https://img.youtube.com/vi/yKWe25rKSpU/hqdefault.jpg" alt=""></div><div class="title">Janam Tv</div></div>
+      <div class="tile" onclick="openVideo('YGEgelAiUf0')"><div class="thumb"><img src="https://img.youtube.com/vi/YGEgelAiUf0/hqdefault.jpg" alt=""></div><div class="title">Mathrubhumi News</div></div>
+      <div class="tile" onclick="openVideo('-8d8-c0yvyU')"><div class="thumb"><img src="https://img.youtube.com/vi/-8d8-c0yvyU/hqdefault.jpg" alt=""></div><div class="title">Media One Tv</div></div>
+      <div class="tile" onclick="openVideo('yvWggAG_x1I')"><div class="thumb"><img src="https://img.youtube.com/vi/yvWggAG_x1I/hqdefault.jpg" alt=""></div><div class="title">YRF Music</div></div>
+      <div class="tile" onclick="openVideo('36YnV9STBqc')"><div class="thumb"><img src="https://img.youtube.com/vi/36YnV9STBqc/hqdefault.jpg" alt=""></div><div class="title">Good Life Music</div></div>
+      <div class="tile" onclick="openVideo('xRg-fDgCpJc')"><div class="thumb"><img src="https://img.youtube.com/vi/xRg-fDgCpJc/hqdefault.jpg" alt=""></div><div class="title">India Tv</div></div>
     </div>
   </div>
 </div>
 
 <script>
 function openVideo(id){
-  document.getElementById('mainPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1&controls=0&modestbranding=1&rel=0&showinfo=0&disablekb=1&fs=0`;
-}
-const fsBtn = document.getElementById('fsBtn');
-fsBtn.addEventListener('click', ()=>{
+  // channel videos should play with sound (user gesture will be required on some browsers)
   const iframe = document.getElementById('mainPlayer');
-  if(iframe.requestFullscreen){ iframe.requestFullscreen(); }
-  else if(iframe.webkitRequestFullscreen){ iframe.webkitRequestFullscreen(); }
-  else if(iframe.msRequestFullscreen){ iframe.msRequestFullscreen(); }
+  iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0&showinfo=0&disablekb=1&fs=0`;
+}
+
+document.getElementById('fsBtn').addEventListener('click', ()=>{
+  const iframe = document.getElementById('mainPlayer');
+  if(iframe.requestFullscreen) iframe.requestFullscreen();
+  else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+  else if(iframe.msRequestFullscreen) iframe.msRequestFullscreen();
 });
 </script>
 </body>
