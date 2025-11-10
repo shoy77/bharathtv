@@ -1,7 +1,7 @@
 {
   "name": "Bharath TV",
   "short_name": "BharathTV",
-  "id": "/bharath-tv",
+  "id": "/bharathtv",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "any",
