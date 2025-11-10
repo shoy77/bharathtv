@@ -187,5 +187,13 @@ document.getElementById('fsBtn').addEventListener('click', ()=>{
   else if(iframe.msRequestFullscreen) iframe.msRequestFullscreen();
 });
 </script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(() => console.log('✅ Bharath TV Service Worker registered'))
+      .catch(err => console.error('Service Worker failed:', err));
+  }
+</script>
+  
 </body>
 </html>
