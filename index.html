@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
   
-<link rel="manifest" href="/bharahtv/manifest.json">
-<meta name="theme-color" content="#007bff">
 <script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js')
-  .then(() => console.log("✅ Service Worker Registered"));
-}
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(() => console.log('✅ Service Worker registered'))
+      .catch(err => console.log('Service Worker failed:', err));
+  }
 </script>
 
 <meta charset="UTF-8" />
