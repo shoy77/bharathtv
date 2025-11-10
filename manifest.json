@@ -1,22 +1,29 @@
 {
   "name": "Bharath TV",
   "short_name": "BharathTV",
-  "start_url": "index.html",
+  "id": "/bharath-tv",
+  "start_url": "./index.html",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#05060a",
   "theme_color": "#007bff",
-  "orientation": "landscape",
+  "description": "Watch your favorite TV channels live on Bharath TV.",
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "icons/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
-
