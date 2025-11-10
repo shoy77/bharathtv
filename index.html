@@ -190,13 +190,11 @@ if ('serviceWorker' in navigator) {
 </div>
 
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js', { scope: '/bharathtv/' })
-      .then(reg => console.log('✅ Service Worker registered with scope:', reg.scope))
-      .catch(err => console.error('❌ Service Worker failed:', err));
-  });
-}
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(() => console.log('✅ Bharath TV Service Worker registered'))
+      .catch(err => console.error('Service Worker failed:', err));
+  }
 </script>
 </body>
 </html>
