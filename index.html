@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js')
-      .then(() => console.log('✅ Service Worker registered'))
-      .catch(err => console.log('Service Worker failed:', err));
-  }
-</script>
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -144,6 +136,19 @@ html,body{
   .grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:16px; }
 }
 </style>
+
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js', { scope: './' })
+      .then(reg => console.log('✅ Service Worker registered with scope:', reg.scope))
+      .catch(err => console.error('❌ Service Worker failed:', err));
+  });
+}
+</script>
+
+  
 </head>
 <body>
 <div class="wrap">
