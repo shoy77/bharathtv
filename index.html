@@ -186,18 +186,13 @@ if ('serviceWorker' in navigator) {
 </div>
 
 <script>
-function openVideo(id){
-  // channel videos should play with sound (user gesture will be required on some browsers)
-  const iframe = document.getElementById('mainPlayer');
-  iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0&showinfo=0&disablekb=1&fs=0`;
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js', { scope: '/bharathtv/' })
+      .then(reg => console.log('✅ Service Worker registered with scope:', reg.scope))
+      .catch(err => console.error('❌ Service Worker failed:', err));
+  });
 }
-
-document.getElementById('fsBtn').addEventListener('click', ()=>{
-  const iframe = document.getElementById('mainPlayer');
-  if(iframe.requestFullscreen) iframe.requestFullscreen();
-  else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
-  else if(iframe.msRequestFullscreen) iframe.msRequestFullscreen();
-});
 </script>
 </body>
 </html>
